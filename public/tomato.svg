@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Tomato body -->
+  <circle cx="50" cy="58" r="38" fill="#e05c5c"/>
+  <!-- Stem -->
+  <path d="M50 22 Q54 14 62 10 Q58 18 56 22" fill="#4caf50" stroke="#4caf50" stroke-width="1"/>
+  <path d="M50 22 Q46 14 38 10 Q42 18 44 22" fill="#4caf50" stroke="#4caf50" stroke-width="1"/>
+  <rect x="48" y="18" width="4" height="12" rx="2" fill="#388e3c"/>
+  <!-- Shine -->
+  <ellipse cx="38" cy="42" rx="8" ry="6" fill="rgba(255,255,255,0.25)" transform="rotate(-20,38,42)"/>
+</svg>

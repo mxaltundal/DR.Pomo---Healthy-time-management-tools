@@ -1,0 +1,86 @@
+.schedule-panel {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 20px 14px;
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.panel-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin: 0 0 14px;
+}
+
+.schedule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  transition: background 0.15s;
+}
+
+.schedule-item.current {
+  background: var(--accent-dim);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.schedule-item.past {
+  opacity: 0.5;
+}
+
+.schedule-item.skipped {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.item-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.item-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-duration {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.item-tag {
+  font-size: 0.65rem;
+  background: var(--border);
+  border-radius: 4px;
+  padding: 1px 4px;
+  color: var(--text-muted);
+}
+
+.item-check {
+  color: var(--success);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
