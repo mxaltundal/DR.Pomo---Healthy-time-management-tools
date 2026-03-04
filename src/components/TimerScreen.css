@@ -1,0 +1,166 @@
+.timer-screen {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Main area ── */
+.timer-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.timer-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 10;
+}
+
+.logo-small {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.btn-outline {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ── Block label ── */
+.block-type-badge {
+  margin-top: 52px; /* push below topbar */
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+.block-sublabel {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: center;
+  max-width: 320px;
+}
+
+/* ── Ring timer ── */
+.ring-container {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.ring-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.timer-display {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.pause-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ── Pause info ── */
+.pause-info {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: -8px 0 0;
+}
+
+/* ── Controls ── */
+.timer-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ctrl-btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.ctrl-btn:active {
+  transform: scale(0.96);
+}
+
+.ctrl-pause {
+  background: var(--amber);
+  color: #000;
+}
+
+.ctrl-resume {
+  background: var(--accent);
+  color: #fff;
+}
+
+.ctrl-skip {
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+}
+
+.ctrl-summary {
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+}
+
+/* ── Progress text ── */
+.progress-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}

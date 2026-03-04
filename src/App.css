@@ -1,0 +1,70 @@
+/* ── CSS Custom Properties ── */
+:root {
+  --bg: #0f0f13;
+  --surface: #1a1a22;
+  --surface-hover: #252532;
+  --border: #2e2e3d;
+  --text: #e8e8f0;
+  --text-secondary: #b0b0c8;
+  --text-muted: #6a6a88;
+
+  --accent: #e05c5c;
+  --accent-dim: rgba(224, 92, 92, 0.12);
+  --teal: #4db8c8;
+  --green: #56c98b;
+  --amber: #f5c842;
+  --orange: #f0924a;
+  --success: #56c98b;
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root,
+.app {
+  height: 100%;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}
