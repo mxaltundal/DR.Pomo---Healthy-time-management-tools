@@ -350,7 +350,7 @@
 
 .task-item.drag-over {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  background: var(--accent-dim);
 }
 
 .drag-handle {
