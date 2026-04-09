@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { TaskInput, LunchBreakConfig, SessionDuration } from '../types';
 import './SetupScreen.css';
 
@@ -8,6 +8,7 @@ interface Props {
   onAddTask: (task: TaskInput) => void;
   onRemoveTask: (id: string) => void;
   onUpdateTask: (task: TaskInput) => void;
+  onReorderTasks: (fromIndex: number, toIndex: number) => void;
   onSetLunchConfig: (cfg: LunchBreakConfig) => void;
   onStart: () => void;
 }
@@ -22,6 +23,7 @@ export default function SetupScreen({
   onAddTask,
   onRemoveTask,
   onUpdateTask,
+  onReorderTasks,
   onSetLunchConfig,
   onStart,
 }: Props) {
@@ -29,6 +31,8 @@ export default function SetupScreen({
   const [sessionCount, setSessionCount] = useState(1);
   const [sessionType, setSessionType] = useState<SessionDuration>('short');
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const dragIndexRef = useRef<number | null>(null);
 
   function handleAdd() {
     const trimmed = name.trim();
@@ -56,6 +60,28 @@ export default function SetupScreen({
     setName('');
     setSessionCount(1);
     setSessionType('short');
+  }
+
+  function handleDragStart(index: number) {
+    dragIndexRef.current = index;
+  }
+
+  function handleDragOver(e: { preventDefault: () => void }, index: number) {
+    e.preventDefault();
+    setDragOverIndex(index);
+  }
+
+  function handleDrop(toIndex: number) {
+    if (dragIndexRef.current !== null && dragIndexRef.current !== toIndex) {
+      onReorderTasks(dragIndexRef.current, toIndex);
+    }
+    dragIndexRef.current = null;
+    setDragOverIndex(null);
+  }
+
+  function handleDragEnd() {
+    dragIndexRef.current = null;
+    setDragOverIndex(null);
   }
 
   const totalWorkBlocks = tasks.reduce((s, t) => s + t.sessionCount, 0);
@@ -194,7 +220,16 @@ export default function SetupScreen({
           <h2>Görev Listesi</h2>
           <ul>
             {tasks.map((task, idx) => (
-              <li key={task.id} className="task-item">
+              <li
+                key={task.id}
+                className={`task-item${dragOverIndex === idx ? ' drag-over' : ''}`}
+                draggable
+                onDragStart={() => handleDragStart(idx)}
+                onDragOver={e => handleDragOver(e, idx)}
+                onDrop={() => handleDrop(idx)}
+                onDragEnd={handleDragEnd}
+              >
+                <span className="drag-handle" title="Sıralamak için sürükle">⠿</span>
                 <span className="task-num">{idx + 1}.</span>
                 <div className="task-info">
                   <span className="task-name">{task.name}</span>

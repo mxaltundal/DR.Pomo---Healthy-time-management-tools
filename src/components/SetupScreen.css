@@ -334,3 +334,31 @@
 .icon-btn:hover {
   background: var(--surface-hover);
 }
+
+/* ── Drag & drop ── */
+.task-item {
+  cursor: default;
+}
+
+.task-item[draggable='true'] {
+  cursor: grab;
+}
+
+.task-item[draggable='true']:active {
+  cursor: grabbing;
+}
+
+.task-item.drag-over {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+}
+
+.drag-handle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: grab;
+  padding: 0 2px;
+  user-select: none;
+  flex-shrink: 0;
+}
