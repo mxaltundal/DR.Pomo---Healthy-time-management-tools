@@ -84,6 +84,7 @@ export default function App() {
           onAddTask={task => dispatch({ type: 'ADD_TASK', task })}
           onRemoveTask={id => dispatch({ type: 'REMOVE_TASK', taskId: id })}
           onUpdateTask={task => dispatch({ type: 'UPDATE_TASK', task })}
+          onReorderTasks={(fromIndex, toIndex) => dispatch({ type: 'REORDER_TASKS', fromIndex, toIndex })}
           onSetLunchConfig={config => dispatch({ type: 'SET_LUNCH_CONFIG', config })}
           onStart={() => dispatch({ type: 'START_PROGRAM' })}
         />

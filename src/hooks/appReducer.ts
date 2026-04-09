@@ -39,6 +39,15 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         tasks: state.tasks.map(t => (t.id === action.task.id ? action.task : t)),
       };
 
+    case 'REORDER_TASKS': {
+      const { fromIndex, toIndex } = action;
+      if (fromIndex === toIndex) return state;
+      const tasks = [...state.tasks];
+      const [moved] = tasks.splice(fromIndex, 1);
+      tasks.splice(toIndex, 0, moved);
+      return { ...state, tasks };
+    }
+
     case 'SET_LUNCH_CONFIG':
       return { ...state, lunchBreakConfig: action.config };
 

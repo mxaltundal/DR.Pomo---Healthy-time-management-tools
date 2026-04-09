@@ -66,6 +66,7 @@ export type AppAction =
   | { type: 'ADD_TASK'; task: TaskInput }
   | { type: 'REMOVE_TASK'; taskId: string }
   | { type: 'UPDATE_TASK'; task: TaskInput }
+  | { type: 'REORDER_TASKS'; fromIndex: number; toIndex: number }
   | { type: 'SET_LUNCH_CONFIG'; config: LunchBreakConfig }
   | { type: 'START_PROGRAM' }
   | { type: 'RETURN_TO_SETUP' }
