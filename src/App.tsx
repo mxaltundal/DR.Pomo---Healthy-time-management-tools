@@ -1,9 +1,11 @@
-import { useReducer, useEffect, useRef, useCallback } from 'react';
+import { useReducer, useEffect, useRef, useCallback, useState } from 'react';
 import { appReducer, initialState } from './hooks/appReducer';
 import SetupScreen from './components/SetupScreen';
 import TimerScreen from './components/TimerScreen';
 import SummaryScreen from './components/SummaryScreen';
+import MiniTimer from './components/MiniTimer';
 import { todayString } from './utils/timeFormatter';
+import { unlockAudio, playBlockEndSound } from './utils/soundPlayer';
 import './App.css';
 
 const STORAGE_KEY = 'drpomo_state';
@@ -25,6 +27,19 @@ export default function App() {
   const [state, dispatch] = useReducer(appReducer, undefined, loadState);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const summaryFiredRef = useRef(false);
+  const prevBlockIndexRef = useRef(state.currentBlockIndex);
+  const [miniTimerVisible, setMiniTimerVisible] = useState(false);
+
+  // Unlock AudioContext on first user interaction so sounds work later
+  useEffect(() => {
+    const unlock = () => unlockAudio();
+    document.addEventListener('click', unlock, { once: true });
+    document.addEventListener('keydown', unlock, { once: true });
+    return () => {
+      document.removeEventListener('click', unlock);
+      document.removeEventListener('keydown', unlock);
+    };
+  }, []);
 
   // Persist state to localStorage on every change
   useEffect(() => {
@@ -51,6 +66,30 @@ export default function App() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [state.timerState]);
+
+  // Play notification sound when a block ends naturally (not skipped)
+  useEffect(() => {
+    const prevIdx = prevBlockIndexRef.current;
+    if (state.currentBlockIndex !== prevIdx) {
+      const prevBlock = state.schedule[prevIdx];
+      if (prevBlock?.completed && !prevBlock.skipped) {
+        playBlockEndSound(prevBlock.type);
+      }
+      prevBlockIndexRef.current = state.currentBlockIndex;
+    }
+  }, [state.currentBlockIndex, state.schedule]);
+
+  // Show mini-timer floating overlay when the user switches away from this tab
+  useEffect(() => {
+    if (state.screen !== 'timer') return;
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setMiniTimerVisible(true);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [state.screen]);
 
   // 22:00 summary notification
   useEffect(() => {
@@ -98,6 +137,13 @@ export default function App() {
           sessionDate={state.sessionDate}
           onDismiss={() => dispatch({ type: 'DISMISS_SUMMARY' })}
           onNewDay={handleNewDay}
+        />
+      )}
+      {state.screen === 'timer' && miniTimerVisible && (
+        <MiniTimer
+          state={state}
+          dispatch={dispatch}
+          onClose={() => setMiniTimerVisible(false)}
         />
       )}
     </div>
