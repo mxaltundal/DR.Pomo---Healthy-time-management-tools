@@ -30,6 +30,17 @@
   z-index: 10;
 }
 
+.timer-topbar-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-popup--active {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
 .logo-small {
   font-size: 1rem;
   font-weight: 700;

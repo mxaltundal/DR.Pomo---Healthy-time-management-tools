@@ -1,9 +1,9 @@
-import { useReducer, useEffect, useRef, useCallback, useState } from 'react';
+import { useReducer, useEffect, useRef, useCallback } from 'react';
 import { appReducer, initialState } from './hooks/appReducer';
+import { useMiniTimerPopup } from './hooks/useMiniTimerPopup';
 import SetupScreen from './components/SetupScreen';
 import TimerScreen from './components/TimerScreen';
 import SummaryScreen from './components/SummaryScreen';
-import MiniTimer from './components/MiniTimer';
 import { todayString } from './utils/timeFormatter';
 import { unlockAudio, playBlockEndSound } from './utils/soundPlayer';
 import './App.css';
@@ -28,7 +28,7 @@ export default function App() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const summaryFiredRef = useRef(false);
   const prevBlockIndexRef = useRef(state.currentBlockIndex);
-  const [miniTimerVisible, setMiniTimerVisible] = useState(false);
+  const { openPopup, isPopupOpen } = useMiniTimerPopup(state, dispatch);
 
   // Unlock AudioContext on first user interaction so sounds work later
   useEffect(() => {
@@ -79,18 +79,6 @@ export default function App() {
     }
   }, [state.currentBlockIndex, state.schedule]);
 
-  // Show mini-timer floating overlay when the user switches away from this tab
-  useEffect(() => {
-    if (state.screen !== 'timer') return;
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        setMiniTimerVisible(true);
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [state.screen]);
-
   // 22:00 summary notification
   useEffect(() => {
     if (state.summaryDismissed || state.screen === 'summary') return;
@@ -129,7 +117,7 @@ export default function App() {
         />
       )}
       {state.screen === 'timer' && (
-        <TimerScreen state={state} dispatch={dispatch} />
+        <TimerScreen state={state} dispatch={dispatch} onOpenPopup={openPopup} isPopupOpen={isPopupOpen} />
       )}
       {state.screen === 'summary' && (
         <SummaryScreen
@@ -137,13 +125,6 @@ export default function App() {
           sessionDate={state.sessionDate}
           onDismiss={() => dispatch({ type: 'DISMISS_SUMMARY' })}
           onNewDay={handleNewDay}
-        />
-      )}
-      {state.screen === 'timer' && miniTimerVisible && (
-        <MiniTimer
-          state={state}
-          dispatch={dispatch}
-          onClose={() => setMiniTimerVisible(false)}
         />
       )}
     </div>
