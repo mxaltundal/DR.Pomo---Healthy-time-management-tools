@@ -6,6 +6,8 @@ import './TimerScreen.css';
 interface Props {
   state: AppState;
   dispatch: React.Dispatch<AppAction>;
+  onOpenPopup: () => void;
+  isPopupOpen: boolean;
 }
 
 const BLOCK_TYPE_LABELS: Record<string, string> = {
@@ -22,7 +24,7 @@ const BLOCK_COLORS: Record<string, string> = {
   lunch: 'var(--orange)',
 };
 
-export default function TimerScreen({ state, dispatch }: Props) {
+export default function TimerScreen({ state, dispatch, onOpenPopup, isPopupOpen }: Props) {
   const { schedule, currentBlockIndex, timerState, timeRemaining } = state;
   const block = schedule[currentBlockIndex];
 
@@ -54,12 +56,21 @@ export default function TimerScreen({ state, dispatch }: Props) {
         {/* Top bar */}
         <div className="timer-topbar">
           <span className="logo-small">🍅 DR.Pomo</span>
-          <button
-            className="btn-outline"
-            onClick={() => dispatch({ type: 'RETURN_TO_SETUP' })}
-          >
-            ✏️ Planı Düzenle
-          </button>
+          <div className="timer-topbar-actions">
+            <button
+              className={`btn-outline btn-popup${isPopupOpen ? ' btn-popup--active' : ''}`}
+              onClick={onOpenPopup}
+              title={isPopupOpen ? 'Açılır pencere zaten açık' : 'Zamanlayıcıyı ayrı pencerede aç'}
+            >
+              {isPopupOpen ? '📤 Açık' : '📤 Dışa Al'}
+            </button>
+            <button
+              className="btn-outline"
+              onClick={() => dispatch({ type: 'RETURN_TO_SETUP' })}
+            >
+              ✏️ Planı Düzenle
+            </button>
+          </div>
         </div>
 
         {/* Block type label */}
