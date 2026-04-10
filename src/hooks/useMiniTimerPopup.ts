@@ -226,6 +226,20 @@ export function useMiniTimerPopup(
   dispatchRef.current = dispatch;
   stateRef.current = state;
 
+  const closePopup = useCallback(() => {
+    if (closeCheckerRef.current) {
+      clearInterval(closeCheckerRef.current);
+      closeCheckerRef.current = null;
+    }
+    channelRef.current?.close();
+    channelRef.current = null;
+    if (popupRef.current && !popupRef.current.closed) {
+      popupRef.current.close();
+    }
+    popupRef.current = null;
+    setIsPopupOpen(false);
+  }, []);
+
   const openPopup = useCallback(() => {
     // If popup is already open, focus it
     if (popupRef.current && !popupRef.current.closed) {
@@ -261,7 +275,7 @@ export function useMiniTimerPopup(
       const { type, action } = e.data as { type: string; action?: string };
       if (type === 'ACTION') {
         if (action === 'CLOSE') {
-          setIsPopupOpen(false);
+          closePopup();
         } else if (action === 'PAUSE') {
           dispatchRef.current({ type: 'PAUSE' });
         } else if (action === 'RESUME') {
@@ -298,7 +312,7 @@ export function useMiniTimerPopup(
         setIsPopupOpen(false);
       }
     }, 500);
-  }, []);
+  }, [closePopup]);
 
   // Sync every state change (timer ticks, pauses, etc.) to the popup.
   // The timer ticks every second by design, so this is the expected update frequency.
@@ -306,6 +320,13 @@ export function useMiniTimerPopup(
     if (!isPopupOpen || !channelRef.current) return;
     channelRef.current.postMessage({ type: 'STATE_UPDATE', state });
   }, [state, isPopupOpen]);
+
+  // Close popup when the main window/tab is closed or navigated away
+  useEffect(() => {
+    const handleBeforeUnload = () => closePopup();
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [closePopup]);
 
   // Clean up popup, channel, and interval when the component unmounts
   useEffect(() => {
